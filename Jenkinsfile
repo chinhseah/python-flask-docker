@@ -23,6 +23,7 @@ pipeline {
           sh "pip install --upgrade pip"
           sh "pip install -r requirements.txt --ignore-installed"
           sh "pylint --disable=R,C,W1203 app/app.py"
+          sh "aws ecr get-login"
           sh "export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml"
           sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
           dir('./charts/preview') {
@@ -50,6 +51,7 @@ pipeline {
           sh "pip install --upgrade pip"
           sh "pip install -r requirements.txt --ignore-installed"
           sh "pylint --disable=R,C,W1203 app/app.py"
+          sh "aws ecr get-login"
           sh "export VERSION=`cat VERSION` && skaffold build -f skaffold.yaml"
           sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:\$(cat VERSION)"
         }
